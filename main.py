@@ -1,6 +1,8 @@
 import os
 import base64
+import sys
 # Walk through folder and encrypt the images inside
+sys.set_int_max_str_digits(0)
 
 path_folder = ''
 file = os.listdir(path_folder)
@@ -21,7 +23,7 @@ data_full = ' '.join(format(ord(x), 'b') for x in data).replace(' ','')
 # print(data_full)
 # print('Size {}'.format(len(data_full)))
 
-# Split string every 4 character
+# Split string every 3 character
 n = 3
 data_reduce = [data_full[i:i+n] for i in range(0, len(data_full), n)]
 
@@ -44,18 +46,25 @@ for i in data_reduce:
    else:
       data_reduce_number = data_reduce_number + '8'
 
-print(data_reduce_number)
-print('Tamanio data full')
-print(len(data_full))
-print('tamanio data reduce')
-print(len(data_reduce_number))
-print('Convert to number to bynary?? Maybe!')
 
-# Create a meth
+n=3
+data_reduce_division = [data_reduce_number[i:i+n] for i in range(0, len(data_reduce_number), n)]
+for i in data_reduce_division:
+   print(int(i) / 8)
+print(data_reduce_division)
+#print(data_reduce_division)
 
-# Data split
-files_datas = data.split('_')
-files_datas.pop()
+# print(data_reduce_number)
+# print('Tamanio data full')
+# print(len(data_full))
+# print('tamanio data reduce')
+# print(len(data_reduce_number))
+# print('Convert to number to bynary?? Maybe!')
+
+
+
+# files_datas = data.split('_')
+# files_datas.pop()
 
 # Open data
 # for idx, i in enumerate(files_datas):
