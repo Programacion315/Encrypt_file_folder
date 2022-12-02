@@ -79,3 +79,6 @@ print(data_reduce_division)
 # Combination 16... 4 bits
 # Combination 8... 3 bits
 
+
+#It's harder than I thought....
+
