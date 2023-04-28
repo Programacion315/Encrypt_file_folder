@@ -1,84 +1,107 @@
 import os
 import base64
 import sys
-# Walk through folder and encrypt the images inside
-sys.set_int_max_str_digits(0)
 
-path_folder = ''
-file = os.listdir(path_folder)
-# print(file)
-data = ''
+count = 0
+count2 = 0
 
-for idx, i in enumerate(file):
-   temporary_path_folder = '{}\\{}'.format(path_folder,file[idx])
-   img = None
+def zipImage():
 
-   with open(temporary_path_folder, 'rb') as binary_file:
-      binary_file_data = binary_file.read()
-      base64_encoded_data = base64.b64encode(binary_file_data)
-      base64_message = base64_encoded_data.decode('utf-8')
-      data = data + base64_message + '_'
+   global count
+   global count2
 
-data_full = ' '.join(format(ord(x), 'b') for x in data).replace(' ','')
-# print(data_full)
-# print('Size {}'.format(len(data_full)))
+   path_folder = './images'
+   file = os.listdir(path_folder)
 
-# Split string every 3 character
-n = 3
-data_reduce = [data_full[i:i+n] for i in range(0, len(data_full), n)]
+   data = ''
 
-data_reduce_number = ""
-for i in data_reduce:
-   if i == '111':
-      data_reduce_number = data_reduce_number + '1'
-   elif i == '110':
-      data_reduce_number = data_reduce_number + '2'
-   elif i == '101':
-      data_reduce_number = data_reduce_number + '3'
-   elif i == '100':
-      data_reduce_number = data_reduce_number + '4'
-   elif i == '011':
-      data_reduce_number = data_reduce_number + '5'
-   elif i == '010':
-      data_reduce_number = data_reduce_number + '6'
-   elif i == '001':
-      data_reduce_number = data_reduce_number + '7'
-   else:
-      data_reduce_number = data_reduce_number + '8'
+   for idx, i in enumerate(file):
+      temporary_path_folder = os.path.join(path_folder, file[idx])
+      img = None
+
+      with open(temporary_path_folder, 'rb') as binary_file:
+         binary_file_data = binary_file.read()
+         base64_encoded_data = base64.b64encode(binary_file_data)
+         base64_message = base64_encoded_data.decode('utf-8')
+         data = data + base64_message + '_'
+
+   data_full = ' '.join(format(ord(x), 'b') for x in data).replace(' ','')
+
+   n = 2
+   data_reduce = [data_full[i:i+n] for i in range(0, len(data_full), n)]
+
+   while '10' in data_reduce or '01' in data_reduce:
+      for i in range(len(data_reduce)):
+         if data_reduce[i] == '10':
+               data_reduce[i] = '1'
+         elif data_reduce[i] == '01':
+               data_reduce[i] = '0'
+
+      data_str = ''.join(data_reduce)
+
+      data_reduce = [data_str[i:i+n] for i in range(0, len(data_str), n)]
+      count = count + 1
+
+   print("Vueltas = " + str(count))
 
 
-n=3
-data_reduce_division = [data_reduce_number[i:i+n] for i in range(0, len(data_reduce_number), n)]
-for i in data_reduce_division:
-   print(int(i) / 8)
-print(data_reduce_division)
-#print(data_reduce_division)
+   n = 2
+   data_reduce = [data_str[i:i+n] for i in range(0, len(data_str), n)]
 
-# print(data_reduce_number)
-# print('Tamanio data full')
-# print(len(data_full))
-# print('tamanio data reduce')
-# print(len(data_reduce_number))
-# print('Convert to number to bynary?? Maybe!')
+   while '00' in data_reduce or '11' in data_reduce:
+      for i in range(len(data_reduce)):
+         if data_reduce[i] == '00':
+               data_reduce[i] = '0'
+         elif data_reduce[i] == '11':
+               data_reduce[i] = '1'
 
+      data_str = ''.join(data_reduce)
 
+      data_reduce = [data_str[i:i+n] for i in range(0, len(data_str), n)]
+      print(data_reduce)
+      count2 = count2 + 2
 
-# files_datas = data.split('_')
-# files_datas.pop()
-
-# Open data
-# for idx, i in enumerate(files_datas):
-#    base64_img_bytes = i.encode('utf-8')
-#    with open(str(idx) + '.png', 'wb') as file_to_save:
-#       decoded_image_data = base64.decodebytes(base64_img_bytes)
-#       file_to_save.write(decoded_image_data)
+   print('Vueltas2 = ' + str(count2))
+   data_str = ''.join(data_reduce)
+   print(data_str)
 
 
-# Thinking...
-# Combination 256... 1 byte
-# Combination 16... 4 bits
-# Combination 8... 3 bits
+   print('Total de vueltas: ' + str((count + count2)))
 
 
-#It's harder than I thought....
+def unzipImage(compressed_data):
+    parts = compressed_data.split("_")
+    message = parts[0]
+    c2 = int(parts[2])
+
+    n = 1
+    messageList = [message[i:i+n] for i in range(0, len(message), n)]
+    print(messageList)
+
+    i = 0
+    while i < int(parts[1]):
+        for j in range(len(messageList)):
+            if messageList[j] == '0':
+                messageList[j] = '00'
+            elif message[j] == '1':
+                messageList[j] = '11'
+        i = i + 1
+        print(messageList)
+        data_str = ''.join(messageList)
+        messageList = [data_str[i:i+n] for i in range(0, len(data_str), n)]
+
+    print(messageList)
+
+print('Welcome!')
+
+option = input('To compress type 1, if you want to decompress type 2: ')
+
+if option == '1':
+    zipImage()
+else:
+    bestt = input('Type the bestt: ')
+    unzipImage(bestt)
+
+
+
 
