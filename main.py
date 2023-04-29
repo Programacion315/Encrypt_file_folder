@@ -1,6 +1,7 @@
 import os
 import base64
 import sys
+import time
 
 count = 0
 count2 = 0
@@ -30,43 +31,70 @@ def zipImage():
    n = 2
    data_reduce = [data_full[i:i+n] for i in range(0, len(data_full), n)]
 
-   while '10' in data_reduce or '01' in data_reduce:
-      for i in range(len(data_reduce)):
-         if data_reduce[i] == '10':
-               data_reduce[i] = '1'
-         elif data_reduce[i] == '01':
-               data_reduce[i] = '0'
+   print(data_reduce)
 
-      data_str = ''.join(data_reduce)
+   for i in range(len(data_reduce)):
+        if data_reduce[i] == '10':
+            data_reduce[i] = '2'
+        elif data_reduce[i] == '01':
+            data_reduce[i] = '4'
+        elif data_reduce[i] == '11':
+            data_reduce[i] = '6'
+        elif data_reduce[i] == '00':
+            data_reduce[i] = '8'
 
-      data_reduce = [data_str[i:i+n] for i in range(0, len(data_str), n)]
-      count = count + 1
+   data_str = ''.join(data_reduce)
 
-   print("Vueltas = " + str(count))
-
-
-   n = 2
    data_reduce = [data_str[i:i+n] for i in range(0, len(data_str), n)]
 
-   while '00' in data_reduce or '11' in data_reduce:
-      for i in range(len(data_reduce)):
-         if data_reduce[i] == '00':
-               data_reduce[i] = '0'
-         elif data_reduce[i] == '11':
-               data_reduce[i] = '1'
+   # Se hace la validacion si el grupo es igual
 
-      data_str = ''.join(data_reduce)
+   flag = None #Thelas number
+   ultimo_numero = int(data_reduce[-1])
 
-      data_reduce = [data_str[i:i+n] for i in range(0, len(data_str), n)]
-      print(data_reduce)
-      count2 = count2 + 2
+   print(data_reduce)
 
-   print('Vueltas2 = ' + str(count2))
+   if len(str(ultimo_numero)) == 1:
+      flag = ultimo_numero
+      data_reduce.pop()
+
+
+   print(data_reduce)
+
+
+
+
    data_str = ''.join(data_reduce)
-   print(data_str)
+
+   print(int(data_str))
+
+    #Dividiro
+
+   data_int = int(data_str)
+   print(data_int)
+
+#    for i in range(10000, 100000):
+#       if data_int % i == 0:
+#         print(f"El número " + str(i))
+
+   while len(str(data_int)) > 4:
+
+      data_int = data_int - 1000000000000000
+
+      print(data_int)
+      time.sleep(1)
+
+    # Find maximun dividor
 
 
-   print('Total de vueltas: ' + str((count + count2)))
+
+
+
+
+
+
+
+
 
 
 def unzipImage(compressed_data):
